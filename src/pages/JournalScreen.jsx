@@ -1,11 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
-import { db } from '../firebase'
-// FIXED: Path points to src/data/journalEntries.jsx and matches your export name
-import { journalEntries } from '../data/journalEntries' 
+import { useAuth } from '../contexts/AuthContext'
+import { useStore } from '../store/store'
+import { getUserJournals, addJournal, updateJournal, deleteJournal } from '../utils/firestoreHelpers'
 import {
   collection, addDoc, onSnapshot,
   query, orderBy, doc, deleteDoc, updateDoc, serverTimestamp
 } from 'firebase/firestore'
+
+const journalEntries = [
+  { content: 'Today I practiced deep breathing and felt calmer.', mood: 'Calm', createdAt: new Date('2026-05-12') },
+  { content: 'I completed my checklist and enjoyed the sunshine.', mood: 'Happy', createdAt: new Date('2026-05-13') },
+  { content: 'I reflected on my progress and set gentle goals.', mood: 'Grateful', createdAt: new Date('2026-05-14') },
+]
+
+function formatDate(date) {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
 
 // --- ICON COMPONENTS ---
 function ArrowLeftIcon() { return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="20" height="20"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> }
@@ -28,6 +38,8 @@ const MOODS = ['Happy', 'Calm', 'Anxious', 'Sad', 'Grateful', 'Tired']
 const MAX_CHARS = 280
 
 export default function JournalScreen() {
+  const { currentUser } = useAuth()
+  const { dispatch } = useStore()
   const [entries, setEntries] = useState([])
   const [text, setText] = useState('')
   const [selectedMood, setSelectedMood] = useState('Happy')
@@ -44,41 +56,37 @@ export default function JournalScreen() {
 
   // --- DATA SYNC EFFECT ---
   useEffect(() => {
-    const q = query(collection(db, 'journals'), orderBy('createdAt', 'desc'))
-    
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      // 1. Format Cloud Entries
+    if (!currentUser) return
+
+    const unsubscribe = getUserJournals(currentUser.uid, (snapshot) => {
       const firebaseDocs = snapshot.docs.map(d => ({
-        id: d.id, 
+        id: d.id,
         ...d.data(),
         isLocal: false,
         date: d.data().createdAt?.toDate().toLocaleDateString('en-US', {
           month: 'short', day: 'numeric', year: 'numeric'
         }) || 'Just now'
-      }));
+      }))
 
-      // 2. Format Local Entries (Mapping 'content' to 'text' so the UI can read it)
       const localDocs = journalEntries.map((entry, index) => ({
         id: `local-${index}`,
-        text: entry.content, 
+        text: entry.content,
         mood: entry.mood,
         isLocal: true,
-        date: entry.createdAt.toLocaleDateString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric'
-        })
-      }));
+        date: formatDate(entry.createdAt),
+      }))
 
-      // 3. Merge Both Sets
-      const combined = [...firebaseDocs, ...localDocs];
-      setEntries(combined);
+      const combined = [...firebaseDocs, ...localDocs]
+      setEntries(combined)
+    })
 
-      // 4. Update Streak based on unique dates
-      const uniqueDays = new Set(combined.map(e => e.date));
-      setStreak(uniqueDays.size);
-    });
+    return () => unsubscribe()
+  }, [currentUser])
 
-    return () => unsubscribe();
-  }, []);
+  useEffect(() => {
+    const uniqueDays = new Set(entries.map(e => e.date))
+    setStreak(uniqueDays.size)
+  }, [entries])
 
   // --- BREAK TIMER EFFECT ---
   useEffect(() => {
@@ -95,49 +103,56 @@ export default function JournalScreen() {
 
   // --- ACTIONS ---
   async function saveEntry() {
-    if (locked || !text.trim()) return
+    if (locked || !text.trim() || !currentUser) return
     try {
-      await addDoc(collection(db, 'journals'), { 
-        text: text.trim(), 
-        mood: selectedMood, 
-        createdAt: serverTimestamp() 
-      })
+      await addJournal(currentUser.uid, '', text.trim(), locked)
       setText('')
-    } catch (err) { console.error('Save error:', err) }
-  }
-  
-  async function deleteEntry(id, isLocal) {
-    if (isLocal) {
-        alert("Cannot delete pre-written entries from the database.");
-        return;
+    } catch (err) {
+      console.error('Save error:', err)
+      alert('Unable to save entry. Please check your network connection.')
     }
-    try { await deleteDoc(doc(db, 'journals', id)) }
-    catch (err) { console.error('Delete error:', err) }
   }
 
-  function openEdit(entry) { 
-    if (entry.isLocal) {
-        alert("Pre-written entries cannot be edited.");
-        return;
+  async function deleteEntry(id, isLocal) {
+    if (isLocal) {
+      alert('Cannot delete pre-written entries.')
+      return
     }
-    setEditId(entry.id); 
-    setEditText(entry.text);
+    try {
+      await deleteDoc(doc(db, 'journals', id))
+    } catch (err) {
+      console.error('Delete error:', err)
+    }
+  }
+
+  function openEdit(entry) {
+    if (entry.isLocal) {
+      alert('Pre-written entries cannot be edited.')
+      return
+    }
+    setEditId(entry.id)
+    setEditText(entry.text)
   }
 
   async function confirmEdit() {
     if (!editText.trim()) return
     try {
       await updateDoc(doc(db, 'journals', editId), { text: editText.trim() })
-      setEditId(null); setEditText('')
-    } catch (err) { console.error('Edit error:', err) }
+      setEditId(null)
+      setEditText('')
+    } catch (err) {
+      console.error('Edit error:', err)
+    }
   }
 
   async function clearAllEntries() {
-    const cloudEntries = entries.filter(e => !e.isLocal);
+    const cloudEntries = entries.filter(e => !e.isLocal)
     try {
       await Promise.all(cloudEntries.map(e => deleteDoc(doc(db, 'journals', e.id))))
       setShowMenu(false)
-    } catch (err) { console.error('Clear error:', err) }
+    } catch (err) {
+      console.error('Clear error:', err)
+    }
   }
 
   function toggleSort() { 
@@ -202,7 +217,7 @@ export default function JournalScreen() {
 
       <div className="jr">
         <div className="jr-hdr">
-          <button className="jr-ibtn"><ArrowLeftIcon /></button>
+          <button className="jr-ibtn" onClick={() => dispatch({ type: 'SET_TAB', tab: 'home' })}><ArrowLeftIcon /></button>
           <div style={{ display: 'flex', gap: 8 }}>
             <button className="jr-ibtn" onClick={() => setLocked(l => !l)}>
               {locked ? <LockIcon /> : <LockOpenIcon />}
@@ -258,13 +273,14 @@ export default function JournalScreen() {
               </div>
               <div className="jr-etxt">{entry.text}</div>
               <div className="jr-eacts">
-                {!entry.isLocal && (
+                {!entry.isLocal ? (
                   <>
                     <button className="jr-ebtn" onClick={() => openEdit(entry)}><PencilIcon /> Edit</button>
                     <button className="jr-ebtn" style={{ color: '#c03030' }} onClick={() => deleteEntry(entry.id, entry.isLocal)}><TrashIcon /> Delete</button>
                   </>
+                ) : (
+                  <span style={{ fontSize: '10px', color: '#2a5a80', opacity: 0.6 }}>Read-only Entry</span>
                 )}
-                {entry.isLocal && <span style={{fontSize: '10px', color: '#2a5a80', opacity: 0.6}}>Read-only Entry</span>}
               </div>
             </div>
           ))}
@@ -297,7 +313,7 @@ export default function JournalScreen() {
                 <SortIcon /> Sort: {sortAsc ? 'Oldest' : 'Newest'} first
               </button>
               <button className="jr-mrow" style={{ color: '#c03030' }} onClick={clearAllEntries}>
-                <TrashIcon /> Clear Cloud Data
+                <TrashIcon /> Clear saved entries
               </button>
               <button className="jr-mno" style={{ width: '100%' }} onClick={() => setShowMenu(false)}>Close</button>
             </div>
