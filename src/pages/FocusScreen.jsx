@@ -283,26 +283,62 @@ export default function FocusScreen() {
         </div>
       )}
 
-      {/* COMPLETION MODAL (UNCHANGED STYLE) */}
-      {focus.showCompletion && (
-        <div
-          className="overlay"
-          onClick={() =>
-            dispatch({ type: 'FOCUS_CLOSE_COMPLETION' })
-          }
-        >
-          <div onClick={(e) => e.stopPropagation()}>
-            <h2>ALL set for today! 🌟</h2>
-            <button
-              onClick={() =>
-                dispatch({ type: 'FOCUS_CLOSE_COMPLETION' })
-              }
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+{/* COMPLETION MODAL */}
+{focus.showCompletion && (
+  <div
+    className="overlay"
+    onClick={() => dispatch({ type: 'FOCUS_CLOSE_COMPLETION' })}
+    style={{
+      backdropFilter: 'blur(8px)',
+      background: 'rgba(0,0,0,0.45)',
+      display: 'flex',
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+      paddingBottom: 24,
+    }}
+  >
+    <div
+      onClick={e => e.stopPropagation()}
+      style={{
+        width: '100%',
+        maxWidth: 420,
+        borderRadius: 28,
+        padding: '28px 24px',
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08))',
+        border: '1px solid rgba(255,255,255,0.25)',
+        backdropFilter: 'blur(20px)',
+        color: 'white',
+        textAlign: 'center',
+        animation: 'slideUp 0.3s ease',
+      }}
+    >
+      <div style={{ fontSize: 52, marginBottom: 12 }}>🌟</div>
+      <h2 style={{ fontSize: 22, fontWeight: 800, margin: '0 0 8px', color: 'white' }}>
+        You're all set for today!
+      </h2>
+      <p style={{ fontSize: 14, opacity: 0.8, marginBottom: 24, lineHeight: 1.5 }}>
+        You've completed all your morning SAVERS. Have an amazing, intentional day. 💫
+      </p>
+      <button
+        onClick={() => dispatch({ type: 'FOCUS_CLOSE_COMPLETION' })}
+        style={{
+          width: '100%',
+          padding: '14px',
+          borderRadius: 16,
+          border: 'none',
+          background: 'white',
+          color: '#1a4d7a',
+          fontWeight: 800,
+          fontSize: 15,
+          cursor: 'pointer',
+          fontFamily: 'inherit',
+        }}
+      >
+        Let's go! 🚀
+      </button>
+    </div>
+  </div>
+)}
     </div>
   )
 }

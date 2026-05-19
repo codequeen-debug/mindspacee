@@ -8,6 +8,7 @@ import {
   updateProfile
 } from 'firebase/auth'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { getUser } from '../utils/firestoreHelpers'
 
 const AuthContext = createContext()
 
@@ -17,6 +18,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null)
+  const [currentUserProfile, setCurrentUserProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
   async function signup(email, password, displayName) {
@@ -27,7 +29,8 @@ export function AuthProvider({ children }) {
     await setDoc(doc(db, 'users', userCredential.user.uid), {
       displayName,
       email,
-      role: 'student', // Default role
+      role: 'student',
+      assignedTherapist: null,
       createdAt: serverTimestamp()
     })
 
@@ -43,8 +46,19 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user)
+      if (user) {
+        try {
+          const profile = await getUser(user.uid)
+          setCurrentUserProfile(profile)
+        } catch (err) {
+          console.error('Failed to load user profile:', err)
+          setCurrentUserProfile(null)
+        }
+      } else {
+        setCurrentUserProfile(null)
+      }
       setLoading(false)
     })
 
@@ -53,6 +67,8 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    currentUserProfile,
+    role: currentUserProfile?.role,
     signup,
     login,
     logout

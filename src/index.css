@@ -346,6 +346,20 @@ body {
 }
 .cal-day:hover:not(.today) { background: rgba(0,0,0,0.07); }
 
+.cal-day.selected-day {
+  background: #357ABD;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 0 0 2px #7EC3E8;
+}
+
 /* Task list */
 .tasks-section {
   padding: 4px 16px 8px;

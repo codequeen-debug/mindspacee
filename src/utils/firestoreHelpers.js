@@ -24,10 +24,10 @@ export function getUserJournals(userId, callback) {
   return onSnapshot(q, callback)
 }
 
-export async function addJournal(userId, title, content, locked = false) {
+export async function addJournal(userId, mood, content, locked = false) {
   return addDoc(collection(db, 'journals'), {
     userId,
-    title,
+    mood,
     content,
     locked,
     createdAt: serverTimestamp()

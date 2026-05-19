@@ -139,20 +139,21 @@ export default function StatusBar() {
           <button
             onClick={handleLogout}
             style={{
-              background: 'none',
-              border: 'none',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(13,45,69,0.06)',
               color: 'currentColor',
               cursor: 'pointer',
-              padding: '2px',
-              borderRadius: '4px',
+              padding: '4px 8px',
+              borderRadius: '8px',
               fontSize: '12px',
-              opacity: 0.7
+              opacity: 0.9,
+              marginLeft: '6px'
             }}
-            onMouseEnter={(e) => e.target.style.opacity = '1'}
-            onMouseLeave={(e) => e.target.style.opacity = '0.7'}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}
             title="Logout"
           >
-            ↗
+            Logout
           </button>
         )}
 

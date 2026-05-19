@@ -144,6 +144,7 @@ export default function PlannerScreen() {
       </div>
 
       {/* Task List */}
+
       <div className="tasks-section">
         <div className="tasks-header">
           <div>
@@ -156,6 +157,7 @@ export default function PlannerScreen() {
           <div
             key={task.id}
             className="task-item"
+            style={{ marginTop: 12 }}
           >
             <div
               className={`task-checkbox ${task.done ? 'checked' : ''}`}
