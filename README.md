@@ -110,22 +110,43 @@ Here’s the sample task breakdown as bullet points:
 
 ## Project Structure
 
-```
-src/
-├── main.jsx              # Entry point
-├── App.jsx               # Shell + routing
-├── index.css             # Design tokens + global styles
-├── store/
-│   └── store.jsx         # useReducer state + StoreContext
-├── components/
-│   ├── StatusBar.jsx
-│   └── BottomNav.jsx
-└── pages/
-    ├── HomeScreen.jsx
-    ├── PlannerScreen.jsx
-    ├── FocusScreen.jsx
-    └── JournalScreen.jsx
-```
+mindspace/
+├── index.html
+├── vite.config.js
+├── package.json
+├── babel.config.cjs
+├── jest.setup.js
+├── firebase.json
+├── firestore.rules
+├── firestore.indexes.json
+├── README.md
+└── src/
+    ├── App.jsx
+    ├── main.jsx
+    ├── index.css
+    ├── firebase.js
+    ├── StatusBar.test.jsx
+    ├── components/
+    │   ├── StatusBar.jsx
+    │   ├── BottomNav.jsx
+    │   └── ProtectedRoute.jsx
+    ├── contexts/
+    │   └── AuthContext.jsx
+    ├── data/
+    │   └── journalEntries.js
+    ├── pages/
+    │   ├── HomeScreen.jsx
+    │   ├── LandingPage.jsx
+    │   ├── LoginScreen.jsx
+    │   ├── SignupScreen.jsx
+    │   ├── PlannerScreen.jsx
+    │   ├── FocusScreen.jsx
+    │   ├── JournalScreen.jsx
+    │   └── ChatScreen.jsx
+    ├── store/
+    │   └── store.jsx
+    └── utils/
+        └── firestoreHelpers.js
 
 ## Design System
 
