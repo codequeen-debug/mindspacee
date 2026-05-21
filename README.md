@@ -10,6 +10,7 @@ Login using:
 - rich@gmail.com
 - password: 123456
 
+Demo Video can be found below.
 
 ## Features
 
