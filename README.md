@@ -92,10 +92,10 @@ Here’s the sample task breakdown as bullet points:
 ## System Architecture
 
 ### Structural Diagram
-<img width="265" height="250" alt="mindspace_system_architecture_overview" src="https://github.com/user-attachments/assets/18d2a061-d481-4880-879f-4b9ea71cfb38" />
+<img width="565" height="550" alt="mindspace_system_architecture_overview" src="https://github.com/user-attachments/assets/18d2a061-d481-4880-879f-4b9ea71cfb38" />
 
 ### Data flow diagram
-<img width="440" height="320" alt="image" src="https://github.com/user-attachments/assets/5eb8f08a-bf83-4502-b38f-0be450a03364" />
+<img width="540" height="520" alt="image" src="https://github.com/user-attachments/assets/5eb8f08a-bf83-4502-b38f-0be450a03364" />
 
 
 
