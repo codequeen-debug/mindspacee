@@ -90,8 +90,8 @@ Here’s the sample task breakdown as bullet points:
   - Unit testing (StatusBar.test.jsx, others)
 
 - All
-  - Documentation (README, architecture diagram, user stories)
-  - Deployment & demo setup
+  - Documentation (README, UI, user stories)
+    
 
 ## System Architecture
 
