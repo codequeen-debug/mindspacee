@@ -5,6 +5,11 @@ A mindfulness app built with Vite + React, based on a Figma prototype.
 ## Live Link
 https://mindspaceee.netlify.app/
 
+## Demo Account
+Login using: 
+rich@gmail.com
+password: 123456
+
 
 ## Features
 
