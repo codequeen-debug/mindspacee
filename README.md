@@ -90,7 +90,12 @@ Here’s the sample task breakdown as bullet points:
   - Deployment & demo setup
 
 ## System Architecture
-<img width="165" height="150" alt="mindspace_system_architecture_overview" src="https://github.com/user-attachments/assets/18d2a061-d481-4880-879f-4b9ea71cfb38" />
+
+### Structural Diagram
+<img width="265" height="250" alt="mindspace_system_architecture_overview" src="https://github.com/user-attachments/assets/18d2a061-d481-4880-879f-4b9ea71cfb38" />
+
+### Data flow diagram
+<img width="440" height="320" alt="image" src="https://github.com/user-attachments/assets/5eb8f08a-bf83-4502-b38f-0be450a03364" />
 
 
 
