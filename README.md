@@ -131,3 +131,4 @@ lavender calendar accent (`#9b8ec4`), and dark modals (`#2e2e3e`).
 Fonts: **Sora** (display/headings) + **DM Sans** (body text) via Google Fonts.
 
 # Demo
+https://github.com/user-attachments/assets/287586b6-f414-4bf3-ad3f-c3d7835e8e28
