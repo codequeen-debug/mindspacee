@@ -2,6 +2,10 @@
 
 A mindfulness app built with Vite + React, based on a Figma prototype.
 
+## Live Link
+https://mindspaceee.netlify.app/
+
+
 ## Features
 
 - **Planner** — Calendar (navigable month view) + task checklist with add/delete/sort
