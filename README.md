@@ -111,41 +111,77 @@ Here’s the sample task breakdown as bullet points:
 ## Project Structure
 
 mindspace/
+
 ├── index.html
+
 ├── vite.config.js
+
 ├── package.json
+
 ├── babel.config.cjs
+
 ├── jest.setup.js
+
 ├── firebase.json
+
 ├── firestore.rules
+
 ├── firestore.indexes.json
+
 ├── README.md
+
 └── src/
+
     ├── App.jsx
+    
     ├── main.jsx
+    
     ├── index.css
+    
     ├── firebase.js
+    
     ├── StatusBar.test.jsx
+    
     ├── components/
+    
     │   ├── StatusBar.jsx
+    
     │   ├── BottomNav.jsx
+    
     │   └── ProtectedRoute.jsx
+    
     ├── contexts/
+    
     │   └── AuthContext.jsx
+    
     ├── data/
+    
     │   └── journalEntries.js
+    
     ├── pages/
+    
     │   ├── HomeScreen.jsx
+    
     │   ├── LandingPage.jsx
+    
     │   ├── LoginScreen.jsx
+    
     │   ├── SignupScreen.jsx
+    
     │   ├── PlannerScreen.jsx
+    
     │   ├── FocusScreen.jsx
+    
     │   ├── JournalScreen.jsx
+    
     │   └── ChatScreen.jsx
+    
     ├── store/
+    
     │   └── store.jsx
+    
     └── utils/
+    
         └── firestoreHelpers.js
 
 ## Design System
