@@ -7,8 +7,8 @@ https://mindspaceee.netlify.app/
 
 ## Demo Account
 Login using: 
-rich@gmail.com
-password: 123456
+- rich@gmail.com
+- password: 123456
 
 
 ## Features
