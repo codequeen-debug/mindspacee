@@ -129,3 +129,5 @@ The palette matches the prototype: light steel blue (`#7fafc4`) primary, muted t
 lavender calendar accent (`#9b8ec4`), and dark modals (`#2e2e3e`).
 
 Fonts: **Sora** (display/headings) + **DM Sans** (body text) via Google Fonts.
+
+# Demo
